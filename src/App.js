@@ -9,6 +9,7 @@ function App() {
   const [filter, setFilter] = useState("")
 
   useEffect(() => {
+    // Add logic to incorporate filter
     const sub = DataStore
       .observeQuery(Post)
       .subscribe((snapshot) => {
@@ -26,27 +27,14 @@ function App() {
 
   async function exportAsFile() {
     let output = ""
-
-    for await (const post of posts) {
-      output += `${post.title}\n\n`
-      output += `${post.content}\n\n`
-      output += `Comments:\n`
-      for await (const comment of post.comments) {
-        output += `- ${comment.content} @ ${comment.createdAt}\n`
-        for await (const reply of comment.replies) {
-          output += `  - ${reply.content} @ ${reply.createdAt}\n`
-        }
-      }
-      output += `-------\n`
-    } 
-
+    // Add logic to format correct output
     downloadString(output)
   }
 
   return (
     <div>
       <h1>Posts</h1>
-      <input placeholder='Filter by reply content' onChange={e => setFilter(e.target.value)}/>
+      <input placeholder='Filter by reply content' onChange={e => setFilter(e.target.value)} />
       <button onClick={handleAddPost}>Add post</button>
       <button onClick={exportAsFile}>Export post, comments, and replies</button>
       {posts.map(post => <PostView key={post.id} post={post} />)}
